@@ -20,6 +20,7 @@ def module_img_ai(title, camera, ifImg):
         print (location)
         if ifImg:
             cv2.imshow(title, frame)
+            cv2.imshow("maskFrame", hsv)
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
                 break
