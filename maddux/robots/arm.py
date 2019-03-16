@@ -2,7 +2,7 @@
 A robot arm defined by a sequence of DH links
 """
 import numpy as np
-import maddux.robots.utils as utils
+import maddux.robots.utils
 
 
 class Arm:
@@ -48,12 +48,12 @@ class Arm:
         if base is None:
             self.base = np.identity(4)
         else:
-            self.base = utils.create_homogeneous_transform_from_point(base)
+            self.base = create_homogeneous_transform_from_point(base)
 
         if tool is None:
             self.tool = np.identity(4)
         else:
-            self.tool = utils.create_homogeneous_transform_from_point(tool)
+            self.tool = create_homogeneous_transform_from_point(tool)
 
         # Create empty list of held objects
         self.held_objects = []

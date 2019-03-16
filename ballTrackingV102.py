@@ -1,20 +1,18 @@
-# from img import module_img_ai
-
-# if __name__ == "__main__":
-#     module_img_ai("extinctCoder", 0, True)
 import numpy as np
-from maddux.objects import Obstacle, Ball
 from maddux.environment import Environment
-from maddux.robots import simple_human_arm
+from maddux.objects import Ball, Target
 
-obstacles = [Obstacle([1, 2, 1], [2, 2.5, 1.5]), Obstacle([3, 2, 1], [4, 2.5, 1.5])]
-ball = Ball([2.5, 2.5, 2.0], 0.25)
+ball = Ball([2, 0, 2], 0.25)
+target = Target([2, 10, 2], 0.5)
+environment = Environment(dynamic_objects=[ball], static_objects=[target])
 
-q0 = np.array([0, 0, 0, np.pi / 2, 0, 0, 0])
-human_arm = simple_human_arm(2.0, 2.0, q0, np.array([3.0, 1.0, 0.0]))
+release_velocity = np.array([0, 15, 5])
+ball.throw(release_velocity)
 
-env = Environment(dimensions=[10.0, 10.0, 20.0], dynamic_objects=[ball], static_objects=obstacles, robot=human_arm)
+# Either run environment for n seconds
+environment.run(2.0)
+# And plot the result
+environment.plot()
 
-q_new = human_arm.ikine(ball.position)
-human_arm.update_angles(q_new)
-env.plot()
+# Or, you can animate it while running
+environment.animate(2.0)

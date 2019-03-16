@@ -49,7 +49,7 @@ class Environment:
         """
         duration_ms = int(duration * 1000)
 
-        for _ in xrange(duration_ms):
+        for _ in range(duration_ms):
             map(lambda obj: obj.step(), self.dynamic_objects)
             if self.collision():
                 break
