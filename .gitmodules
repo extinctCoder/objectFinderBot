@@ -1,0 +1,3 @@
+[submodule "maddux"]
+	path = maddux
+	url = https://github.com/bcaine/maddux.git

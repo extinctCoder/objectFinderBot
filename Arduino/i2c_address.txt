@@ -1,0 +1,10 @@
+12 Bit Servo Driver address are
+
+0x40
+0x70
+	max	min
+claw	180	120 
+5dof	180	0
+4dof	180	0
+
+
