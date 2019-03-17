@@ -1,18 +1,24 @@
 import numpy as np
+from maddux.robots.predefined_robots import simple_human_arm
+from maddux.objects import Ball, Target, Obstacle
 from maddux.environment import Environment
-from maddux.objects import Ball, Target
 
-ball = Ball([2, 0, 2], 0.25)
-target = Target([2, 10, 2], 0.5)
-environment = Environment(dynamic_objects=[ball], static_objects=[target])
+# Create an arm with a specific config and base position
+q0 = np.array([0.5, 0.2, 0, 0.5, 0, 0, 0])
+base_pos = np.array([2.0, 2.0, 0.0])
 
-release_velocity = np.array([0, 15, 5])
-ball.throw(release_velocity)
+# And link segments of length 2.0
+arm = simple_human_arm(2.0, 2.0, q0, base_pos)
 
-# Either run environment for n seconds
-environment.run(2.0)
-# And plot the result
-environment.plot()
+# We then create a ball, target, and obstacle
+ball = Ball(position=[2.0, 0.0, 2.0], radius=0.15)
+target = Target(position=[5.0, 8.0, 2.0], radius=0.5)
+obstacle = Obstacle([4, 4, 0], [5, 5, 2])
 
-# Or, you can animate it while running
-environment.animate(2.0)
+# And use these to create an environment with dimensions 10x10x10
+env = Environment(dimensions=[10, 10, 10],
+                  dynamic_objects=[ball],
+                  static_objects=[obstacle, target],
+                  robot=arm)
+
+env.animate(2.0)

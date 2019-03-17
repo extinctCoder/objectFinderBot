@@ -48,12 +48,12 @@ class Arm:
         if base is None:
             self.base = np.identity(4)
         else:
-            self.base = create_homogeneous_transform_from_point(base)
+            self.base = maddux.robots.utils.create_homogeneous_transform_from_point (base)
 
         if tool is None:
             self.tool = np.identity(4)
         else:
-            self.tool = create_homogeneous_transform_from_point(tool)
+            self.tool = maddux.robots.utils.create_homogeneous_transform_from_point (tool)
 
         # Create empty list of held objects
         self.held_objects = []
@@ -152,7 +152,7 @@ class Arm:
         for i, link in enumerate(self.links):
             # Set link base position
             if i == 0:
-                link.base_pos = utils.create_point_from_homogeneous_transform(
+                link.base_pos = maddux.robots.utils.create_point_from_homogeneous_transform(
                     self.base)
             else:
                 link.base_pos = self.links[i - 1].end_pos
@@ -165,7 +165,7 @@ class Arm:
                 # to get the location in homogenous coords
                 t = self.fkine(links=range(i + 1))
                 # Then convert that to world space
-                end_pos = utils.create_point_from_homogeneous_transform(t).T
+                end_pos = maddux.robots.utils.create_point_from_homogeneous_transform(t).T
                 link.end_pos = end_pos.A1
 
         # After we update all these link positions, we can update
@@ -187,7 +187,7 @@ class Arm:
             return self.links[-1].end_pos
 
         t = self.fkine(q=q)
-        end_pos = utils.create_point_from_homogeneous_transform(t).T
+        end_pos = maddux.robots.utils.create_point_from_homogeneous_transform(t).T
         return end_pos
 
     def end_effector_velocity(self):
@@ -258,14 +258,14 @@ class Arm:
         q = self.get_current_joint_config()
         self.qs = np.array([q.copy()])
 
-        goal = utils.create_homogeneous_transform_from_point(p)
+        goal = maddux.robots.utils.create_homogeneous_transform_from_point(p)
         for i in range(num_iterations):
             # Calculate position error of the end effector
             curr = self.fkine(q)
             err = goal - curr
 
             # Convert error from homogeneous to xyz space
-            err = utils.create_point_from_homogeneous_transform(err)
+            err = maddux.robots.utils.create_point_from_homogeneous_transform(err)
 
             # Get the psudoinverse of the Jacobian
             J = self.jacob0(q)
@@ -297,7 +297,7 @@ class Arm:
 
         # Set up homogeneous transform matrix for the world
         eet = self.fkine(q)
-        rotation = utils.get_rotation_from_homogeneous_transform(eet)
+        rotation = maddux.robots.utils.get_rotation_from_homogeneous_transform(eet)
         zeros = np.zeros((3, 3))
         a1 = np.hstack((rotation, zeros))
         a2 = np.hstack((zeros, rotation))

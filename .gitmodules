@@ -1,0 +1,3 @@
+[submodule "RobotArm-6DOF"]
+	path = RobotArm-6DOF
+	url = https://github.com/hemstreet/RobotArm-6DOF.git

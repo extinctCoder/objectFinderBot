@@ -79,7 +79,7 @@ class Environment:
 
         def update(i):
             ax.clear()
-            for _ in xrange(dynamic_iter_per_frame):
+            for _ in range(dynamic_iter_per_frame):
                 map(lambda obj: obj.step(), self.dynamic_objects)
                 # Check for collisions
                 self.collision()
