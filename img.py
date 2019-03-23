@@ -38,4 +38,4 @@ def module_img_ai(title, camera, ifImg):
     cv2.destroyAllWindows()
     return
 
-module_img_ai("abc", 4, True)
+module_img_ai("abc", 0, True)
