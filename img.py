@@ -17,6 +17,12 @@ def module_img_ai(title, camera, ifImg):
         location , _ = track_ball(mask)
         frame = draw_frame(mask, frame)
         x,y,w,h = location
+        if(x <= 200):
+            print ("right movement")
+        elif(x >= 400):
+            print("left movement")
+        else:
+            print("forworad movment")
         print (location)
         if ifImg:
             cv2.imshow(title, frame)
@@ -27,3 +33,5 @@ def module_img_ai(title, camera, ifImg):
     videoStream.stop()
     cv2.destroyAllWindows()
     return
+
+module_img_ai("abc", 4, True)

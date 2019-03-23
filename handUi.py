@@ -1,7 +1,8 @@
+import time
 from tkinter import *
 import paho.mqtt.client as mqtt
 # Define Variables
-MQTT_BROKER = "192.168.0.104"
+MQTT_BROKER = "192.168.0.117"
 MQTT_PORT = 1883
 MQTT_KEEPALIVE_INTERVAL = 6000
 
@@ -24,6 +25,36 @@ command_third_degree = "objectFinderBot/hand/command/third_degree"
 command_fourth_degree = "objectFinderBot/hand/command/fourth_degree"
 command_fifth_degree = "objectFinderBot/hand/command/fifth_degree"
 command_claw = "objectFinderBot/hand/command/claw"
+
+def button_state_toggle():
+    first_degree_inc_update_btn.config(state=DISABLED)
+    first_degree_dec_update_btn.config(state=DISABLED)
+    second_degree_inc_update_btn.config(state=DISABLED)
+    second_degree_dec_update_btn.config(state=DISABLED)
+    third_degree_inc_update_btn.config(state=DISABLED)
+    third_degree_dec_update_btn.config(state=DISABLED)
+    fourth_degree_inc_update_btn.config(state=DISABLED)
+    fourth_degree_dec_update_btn.config(state=DISABLED)
+    fifth_degree_inc_update_btn.config(state=DISABLED)
+    fifth_degree_dec_update_btn.config(state=DISABLED)
+    claw_inc_update_btn.config(state=DISABLED)
+    claw_dec_update_btn.config(state=DISABLED)
+    speed_update_scale.config(state=DISABLED)
+    time.sleep(.5)
+    first_degree_inc_update_btn.config(state=ACTIVE)
+    first_degree_dec_update_btn.config(state=ACTIVE)
+    second_degree_inc_update_btn.config(state=ACTIVE)
+    second_degree_dec_update_btn.config(state=ACTIVE)
+    third_degree_inc_update_btn.config(state=ACTIVE)
+    third_degree_dec_update_btn.config(state=ACTIVE)
+    fourth_degree_inc_update_btn.config(state=ACTIVE)
+    fourth_degree_dec_update_btn.config(state=ACTIVE)
+    fifth_degree_inc_update_btn.config(state=ACTIVE)
+    fifth_degree_dec_update_btn.config(state=ACTIVE)
+    claw_inc_update_btn.config(state=ACTIVE)
+    claw_dec_update_btn.config(state=ACTIVE)
+    speed_update_scale.config(state=ACTIVE)
+    return
 
 def get_broadrcaster():
     global broadrcaster
@@ -48,6 +79,7 @@ def first_degree_inc_update_func():
         pass
     broadrcaster.publish(command_first_degree, int(speed_first_degree))
     first_degree_txt.config(text=str(speed_first_degree))
+    button_state_toggle()
     return
 
 
@@ -58,6 +90,7 @@ def first_degree_dec_update_func():
         pass
     broadrcaster.publish(command_first_degree, int(speed_first_degree))
     first_degree_txt.config(text=str(speed_first_degree))
+    button_state_toggle()
     return
 
 
@@ -68,6 +101,7 @@ def second_degree_inc_update_func():
         pass
     broadrcaster.publish(command_second_degree, int(speed_second_degree))
     second_degree_txt.config(text=str(speed_second_degree))
+    button_state_toggle()
     return
 
 
@@ -78,6 +112,7 @@ def second_degree_dec_update_func():
         pass
     broadrcaster.publish(command_second_degree, int(speed_second_degree))
     second_degree_txt.config(text=str(speed_second_degree))
+    button_state_toggle()
     return
 
 
@@ -88,6 +123,7 @@ def third_degree_inc_update_func():
         pass
     broadrcaster.publish(command_third_degree, int(speed_third_degree))
     third_degree_txt.config(text=str(speed_third_degree))
+    button_state_toggle()
     return
 
 
@@ -98,6 +134,7 @@ def third_degree_dec_update_func():
         pass
     broadrcaster.publish(command_third_degree, int(speed_third_degree))
     third_degree_txt.config(text=str(speed_third_degree))
+    button_state_toggle()
     return
 
 
@@ -108,6 +145,7 @@ def fourth_degree_inc_update_func():
         pass
     broadrcaster.publish(command_fourth_degree, int(speed_fourth_degree))
     fourth_degree_txt.config(text=str(speed_fourth_degree))
+    button_state_toggle()
     return
 
 
@@ -118,6 +156,7 @@ def fourth_degree_dec_update_func():
         pass
     broadrcaster.publish(command_fourth_degree, int(speed_fourth_degree))
     fourth_degree_txt.config(text=str(speed_fourth_degree))
+    button_state_toggle()
     return
 
 
@@ -128,6 +167,7 @@ def fifth_degree_inc_update_func():
         pass
     broadrcaster.publish(command_fifth_degree, int(speed_fifth_degree))
     fifth_degree_txt.config(text=str(speed_fifth_degree))
+    button_state_toggle()
     return
 
 
@@ -136,8 +176,9 @@ def fifth_degree_dec_update_func():
     if(speed_fifth_degree - hand_speed_factor >= min_dec):
         speed_fifth_degree -= hand_speed_factor
         pass
-    broadrcaster.publish(command_first_degree, int(speed_fifth_degree))
+    broadrcaster.publish(command_fifth_degree, int(speed_fifth_degree))
     fifth_degree_txt.config(text=str(speed_fifth_degree))
+    button_state_toggle()
     return
 
 
@@ -148,6 +189,7 @@ def claw_inc_update_func():
         pass
     broadrcaster.publish(command_claw, int(speed_claw))
     claw_txt.config(text=str(speed_claw))
+    button_state_toggle()
     return
 
 
@@ -158,11 +200,65 @@ def claw_dec_update_func():
         pass
     broadrcaster.publish(command_claw, int(speed_claw))
     claw_txt.config(text=str(speed_claw))
+    button_state_toggle()
     return
 
 
 def sync_func():
     global broadrcaster
+    global speed_first_degree
+    global speed_second_degree
+    global speed_third_degree
+    global speed_fourth_degree
+    global speed_fifth_degree
+    global speed_claw
+
+    global hand_speed_factor
+
+    first_degree_inc_update_btn.config(state=DISABLED)
+    first_degree_dec_update_btn.config(state=DISABLED)
+    second_degree_inc_update_btn.config(state=DISABLED)
+    second_degree_dec_update_btn.config(state=DISABLED)
+    third_degree_inc_update_btn.config(state=DISABLED)
+    third_degree_dec_update_btn.config(state=DISABLED)
+    fourth_degree_inc_update_btn.config(state=DISABLED)
+    fourth_degree_dec_update_btn.config(state=DISABLED)
+    fifth_degree_inc_update_btn.config(state=DISABLED)
+    fifth_degree_dec_update_btn.config(state=DISABLED)
+    claw_inc_update_btn.config(state=DISABLED)
+    claw_dec_update_btn.config(state=DISABLED)
+    speed_update_scale.config(state=DISABLED)
+
+    speed_first_degree = 60
+    speed_second_degree = 0
+    speed_third_degree = 0
+    speed_fourth_degree = 0
+    speed_fifth_degree = 50
+    speed_claw = 100
+
+    hand_speed_factor = 5
+
+    first_degree_txt.config(text=str(speed_first_degree))
+    second_degree_txt.config(text=str(speed_second_degree))
+    third_degree_txt.config(text=str(speed_third_degree))
+    fourth_degree_txt.config(text=str(speed_fourth_degree))
+    fifth_degree_txt.config(text=str(speed_fifth_degree))
+    claw_txt.config(text=str(speed_claw))
+
+    speed_update_scale.set(hand_speed_factor)
+
+    '''broadrcaster.publish(command_first_degree, int(speed_first_degree))
+    time.sleep(.5)
+    broadrcaster.publish(command_second_degree, int(speed_second_degree))
+    time.sleep(.5)
+    broadrcaster.publish(command_third_degree, int(speed_third_degree))
+    time.sleep(.5)
+    broadrcaster.publish(command_fourth_degree, int(speed_fourth_degree))
+    time.sleep(.5)
+    broadrcaster.publish(command_fifth_degree, int(speed_fifth_degree))
+    time.sleep(.5)
+    broadrcaster.publish(command_claw, int(speed_claw))
+    time.sleep(.5)'''
     first_degree_inc_update_btn.config(state=ACTIVE)
     first_degree_dec_update_btn.config(state=ACTIVE)
     second_degree_inc_update_btn.config(state=ACTIVE)
@@ -175,13 +271,7 @@ def sync_func():
     fifth_degree_dec_update_btn.config(state=ACTIVE)
     claw_inc_update_btn.config(state=ACTIVE)
     claw_dec_update_btn.config(state=ACTIVE)
-
-    broadrcaster.publish(command_first_degree, int(0))
-    broadrcaster.publish(command_second_degree, int(0))
-    broadrcaster.publish(command_third_degree, int(0))
-    broadrcaster.publish(command_fourth_degree, int(0))
-    broadrcaster.publish(command_fifth_degree, int(0))
-    broadrcaster.publish(command_claw, int(0))
+    speed_update_scale.config(state=ACTIVE)
     return
 
 
@@ -233,7 +323,7 @@ claw_dec_update_btn = Button(mainGui, state=DISABLED, text="claw_dec",
 claw_txt = Label(mainGui, text="claw")
 
 speed_update_scale = Scale(
-    mainGui, from_=0, to=10, command=speed_update_func, orient=HORIZONTAL, width=20)
+    mainGui, state=DISABLED, from_=0, to=10, command=speed_update_func, orient=HORIZONTAL, width=20)
 speed_txt = Label(mainGui, text="speed")
 sync_with_hand_btn = Button(
     mainGui, text="sync_with_hand", command=sync_func, height=2, bg="purple")
@@ -263,44 +353,3 @@ sync_with_hand_btn.grid(row=6, column=0, columnspan=6, sticky='EW')
 
 mainGui.mainloop()
 distroy_broadrcaster()
-
-
-'''def update_rgb(isMax, txt, red, green, blue):
-    global broadrcaster
-    print(txt, red, green, blue)
-    h, s, v = rgb2hsv(red, green, blue)
-    print ("HSV VALUE : ", h, s, v)
-    if isMax:
-        #broadrcaster.publish(hue_max_chanel, h)
-        #broadrcaster.publish(saturation_max_chanel, s)
-        broadrcaster.publish(value_max_chanel, v)
-        return
-    else:
-        broadrcaster.publish(hue_min_chanel, h)
-        broadrcaster.publish(saturation_min_chanel, s)
-        broadrcaster.publish(value_min_chanel, v)
-    return
-    
-def rgb2hsv(red, green, blue):
-    red = float(red)
-    green = float(green)
-    blue = float(blue)
-    red, green, blue = red/255.0, green/255.0, blue/255.0
-    maximum = max(red, green, blue)
-    minimum = min(red, green, blue)
-    df = maximum-minimum
-    if maximum == minimum:
-        hue = 0
-    elif maximum == red:
-        hue = (60 * ((green-blue)/df) + 360) % 360
-    elif maximum == green:
-        hue = (60 * ((blue-red)/df) + 120) % 360
-    elif maximum == blue:
-        hue = (60 * ((red-green)/df) + 240) % 360
-    if maximum == 0:
-        saturation = 0
-    else:
-        saturation = df/maximum
-    value = maximum
-    return (hue, saturation, value)
-'''
