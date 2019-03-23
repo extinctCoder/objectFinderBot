@@ -17,13 +17,17 @@ def module_img_ai(title, camera, ifImg):
         location , _ = track_ball(mask)
         frame = draw_frame(mask, frame)
         x,y,w,h = location
-        if(x <= 200):
-            print ("right movement")
-        elif(x >= 400):
-            print("left movement")
-        else:
-            print("forworad movment")
-        print (location)
+        if(x >= 1):
+            if(x <= 200 ):
+                print ("right movement")
+        if(x >= 401):
+            if(x <= 600):
+                print("left movement")
+        if(x >= 201):
+            if(x <= 400):
+                print("forworad movment")
+        if(x == 0):
+            print("object not found")
         if ifImg:
             cv2.imshow(title, frame)
             cv2.imshow("maskFrame", hsv)
