@@ -2,7 +2,7 @@ import time
 from tkinter import *
 import paho.mqtt.client as mqtt
 # Define Variables
-MQTT_BROKER = "192.168.0.117"
+MQTT_BROKER = "192.168.0.102"
 MQTT_PORT = 1883
 MQTT_KEEPALIVE_INTERVAL = 6000
 
