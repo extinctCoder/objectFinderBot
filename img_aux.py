@@ -2,7 +2,7 @@ import cv2
 import imutils
 import numpy as np
 from collections import deque
-
+ 
 pts = deque(maxlen=64)
 
 def filter_colour(frame):
