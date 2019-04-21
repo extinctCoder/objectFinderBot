@@ -1,4 +1,4 @@
-#define echoPin 8
+/*#define echoPin 8
 #define trigPin 9
 double distance = 0;
 int state = -1;
@@ -28,3 +28,4 @@ void loop() {
   }
   delay(200);
 }
+*/

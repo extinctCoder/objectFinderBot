@@ -2,7 +2,7 @@ import time
 from tkinter import *
 import paho.mqtt.client as mqtt
 # Define Variables
-MQTT_BROKER = "192.168.0.102"
+MQTT_BROKER = "192.168.0.104"
 MQTT_PORT = 1883
 MQTT_KEEPALIVE_INTERVAL = 6000
 
@@ -25,6 +25,7 @@ command_third_degree = "objectFinderBot/hand/command/third_degree"
 command_fourth_degree = "objectFinderBot/hand/command/fourth_degree"
 command_fifth_degree = "objectFinderBot/hand/command/fifth_degree"
 command_claw = "objectFinderBot/hand/command/claw"
+
 
 def button_state_toggle():
     first_degree_inc_update_btn.config(state=DISABLED)
@@ -55,6 +56,7 @@ def button_state_toggle():
     claw_dec_update_btn.config(state=ACTIVE)
     speed_update_scale.config(state=ACTIVE)
     return
+
 
 def get_broadrcaster():
     global broadrcaster
