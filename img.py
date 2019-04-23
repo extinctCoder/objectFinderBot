@@ -5,7 +5,7 @@ from imutils.video import VideoStream
 from img_aux import filter_colour, track_ball, draw_frame
 import paho.mqtt.client as mqtt
 
-MQTT_BROKER = "127.0.0.1"
+MQTT_BROKER = "192.168.0.117"
 MQTT_PORT = 1883
 MQTT_KEEPALIVE_INTERVAL = 6000
 
@@ -63,4 +63,4 @@ def module_img_ai(title, camera, ifImg):
     return
 
 
-module_img_ai("module_img_ai", 2, True)
+module_img_ai("module_img_ai", 0, False)

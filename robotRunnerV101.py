@@ -2,20 +2,21 @@ import time
 import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
 
-motor_a_1 = 12
-motor_a_2 = 13
-motor_b_1 = 12
-motor_b_2 = 13
+motor_a_1 = 31
+motor_a_2 = 33
+motor_b_1 = 35
+motor_b_2 = 37
 
-motor_a_pwm = 13
-motor_b_pwm = 13
+motor_a_pwm = 36
+motor_b_pwm = 38
 
 
 command_motor_direction = "objectFinderBot/motor/command/direction"
 command_motor_speed = "objectFinderBot/motor/command/speed"
-
+topic = "objectFinderBot/motor/command/#"
 
 GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
 GPIO.setup(motor_a_1, GPIO.OUT)
 GPIO.setup(motor_a_2, GPIO.OUT)
 GPIO.setup(motor_b_1, GPIO.OUT)
@@ -23,8 +24,8 @@ GPIO.setup(motor_b_2, GPIO.OUT)
 GPIO.setup(motor_a_pwm, GPIO.OUT)
 GPIO.setup(motor_b_pwm, GPIO.OUT)
 
-pwm_a = GPIO.PWM(motor_a_pwm, 50)
-pwm_b = GPIO.PWM(motor_b_pwm, 50)
+pwm_a = GPIO.PWM(motor_a_pwm, 5000)
+pwm_b = GPIO.PWM(motor_b_pwm, 5000)
 pwm_a.start(0)
 pwm_b.start(0)
 
@@ -66,8 +67,6 @@ def stop():
     GPIO.output(motor_a_2, GPIO.LOW)
     GPIO.output(motor_b_1, GPIO.LOW)
     GPIO.output(motor_b_2, GPIO.LOW)
-    pwm_a.ChangeDutyCycle(0)
-    pwm_b.ChangeDutyCycle(0)
     return
 
 
@@ -78,26 +77,26 @@ def change_speed(speed):
 
 
 def on_message(client, userdata, message):
+    print(message)
+    print("xxxx")
     if(message.topic == command_motor_speed):
         change_speed(int(str(message.payload.decode("utf-8"))))
     elif(message.topic == command_motor_direction):
-        switch(int(str(message.payload.decode("utf-8")))) {
-            case 0:  forward()
+        if(int(str(message.payload.decode("utf-8"))) == 0):
+            forward()
             print("forward")
-            break
-            case 1:  left()
+        elif(int(str(message.payload.decode("utf-8"))) == 1):
+            left()
             print("left")
-            break
-            case 2:  backward()
+        elif(int(str(message.payload.decode("utf-8"))) == 2):
+            backward()
             print("backward")
-            break
-            case 3:  right()
+        elif(int(str(message.payload.decode("utf-8"))) == 3):
+            right()
             print("right")
-            break
-            default: stop()
+        elif(int(str(message.payload.decode("utf-8"))) == 4):
+            stop()
             print("stop")
-            break
-        }
     return
 
 
@@ -122,7 +121,7 @@ try:
     client.on_message = on_message
     # client.on_log = on_log
     print("Connecting to mqtt broker")
-    client.connect("127.0.0.1")
+    client.connect("192.168.0.117")
     client.loop_forever()
 
 except KeyboardInterrupt:

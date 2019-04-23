@@ -1,6 +1,6 @@
 import paho.mqtt.client as mqtt
 import time
-broker_address = "127.0.0.1"
+broker_address = "192.168.0.117"
 
 topic = "#"
 

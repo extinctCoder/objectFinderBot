@@ -2,7 +2,7 @@ import time
 from tkinter import *
 import paho.mqtt.client as mqtt
 # Define Variables
-MQTT_BROKER = "192.168.0.104"
+MQTT_BROKER = "192.168.0.117"
 MQTT_PORT = 1883
 MQTT_KEEPALIVE_INTERVAL = 6000
 
@@ -41,7 +41,7 @@ def button_state_toggle():
     claw_inc_update_btn.config(state=DISABLED)
     claw_dec_update_btn.config(state=DISABLED)
     speed_update_scale.config(state=DISABLED)
-    time.sleep(.5)
+    time.sleep(.1)
     first_degree_inc_update_btn.config(state=ACTIVE)
     first_degree_dec_update_btn.config(state=ACTIVE)
     second_degree_inc_update_btn.config(state=ACTIVE)
@@ -235,10 +235,10 @@ def sync_func():
     speed_second_degree = 0
     speed_third_degree = 0
     speed_fourth_degree = 0
-    speed_fifth_degree = 50
+    speed_fifth_degree = 0
     speed_claw = 100
 
-    hand_speed_factor = 5
+    hand_speed_factor = 0
 
     first_degree_txt.config(text=str(speed_first_degree))
     second_degree_txt.config(text=str(speed_second_degree))
@@ -249,18 +249,24 @@ def sync_func():
 
     speed_update_scale.set(hand_speed_factor)
 
-    '''broadrcaster.publish(command_first_degree, int(speed_first_degree))
+    broadrcaster.publish(command_claw, int(speed_claw))
     time.sleep(.5)
-    broadrcaster.publish(command_second_degree, int(speed_second_degree))
-    time.sleep(.5)
-    broadrcaster.publish(command_third_degree, int(speed_third_degree))
-    time.sleep(.5)
-    broadrcaster.publish(command_fourth_degree, int(speed_fourth_degree))
-    time.sleep(.5)
+
     broadrcaster.publish(command_fifth_degree, int(speed_fifth_degree))
     time.sleep(.5)
-    broadrcaster.publish(command_claw, int(speed_claw))
-    time.sleep(.5)'''
+
+    broadrcaster.publish(command_fourth_degree, int(speed_fourth_degree))
+    time.sleep(.5)
+
+    broadrcaster.publish(command_third_degree, int(speed_third_degree))
+    time.sleep(.5)
+
+    broadrcaster.publish(command_second_degree, int(speed_second_degree))
+    time.sleep(.5)
+
+    broadrcaster.publish(command_first_degree, int(speed_first_degree))
+    time.sleep(.5)
+
     first_degree_inc_update_btn.config(state=ACTIVE)
     first_degree_dec_update_btn.config(state=ACTIVE)
     second_degree_inc_update_btn.config(state=ACTIVE)
@@ -280,6 +286,7 @@ def sync_func():
 def speed_update_func(val):
     global hand_speed_factor
     hand_speed_factor = int(val)
+    print(hand_speed_factor)
     return
 
 
