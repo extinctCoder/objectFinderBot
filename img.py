@@ -23,13 +23,13 @@ def get_broadrcaster():
 
 
 def module_img_ai(title, camera, ifImg):
-    videoStream = VideoStream(src=camera).start()
+    videoStream = cv2.VideoCapture('http://192.168.0.117:8081')
     print("PLEASE WAIT WHILE MODULE INITIALIZE THE CAMERA MODILE")
     time.sleep(2.0)
     global broadrcaster, command_motor_direction, command_motor_speed
     broadrcaster = get_broadrcaster()
     while True:
-        frame = imutils.resize(videoStream.read(), width=600)
+        _, frame = videoStream.read()
         blurred = cv2.GaussianBlur(frame, (11, 11), 0)
         hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
 
@@ -39,12 +39,12 @@ def module_img_ai(title, camera, ifImg):
         x, y, w, h = location
         if(x >= 1):
             if(x <= 200):
-                print("right movement")
-                broadrcaster.publish(command_motor_direction, 3)
+                print("left movement x")
+                broadrcaster.publish(command_motor_direction, 1)
         if(x >= 401):
             if(x <= 600):
-                print("left movement")
-                broadrcaster.publish(command_motor_direction, 1)
+                print("right movement x")
+                broadrcaster.publish(command_motor_direction, 3)
         if(x >= 201):
             if(x <= 400):
                 print("forworad movment")
@@ -54,7 +54,7 @@ def module_img_ai(title, camera, ifImg):
             broadrcaster.publish(command_motor_direction, 4)
         if ifImg:
             cv2.imshow(title, frame)
-            cv2.imshow("maskFrame", hsv)
+            # cv2.imshow("maskFrame", hsv)
             key = cv2.waitKey(1) & 0xFF
             if key == ord("q"):
                 break
@@ -63,4 +63,4 @@ def module_img_ai(title, camera, ifImg):
     return
 
 
-module_img_ai("module_img_ai", 0, False)
+module_img_ai("module_img_ai", 0, True)

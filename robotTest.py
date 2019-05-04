@@ -1,24 +1,31 @@
-from __future__ import division
+from adafruit_servokit import ServoKit
 import time
 
-import Adafruit_PCA9685
+time_sleep = .2
 
-import logging
+servo_num = 14
 
-logging.basicConfig(level=logging.DEBUG)
+if_loop = 0
+fix_angle = 110
 
-pwm = Adafruit_PCA9685.PCA9685()
+max = 180
+min = 50
 
-servo_min = 150  # Min pulse length out of 4096
-servo_max = 250  # Max pulse length out of 4096
+kit = ServoKit(channels=16)
 
-pwm.set_pwm_freq(60)
+if if_loop == 0:
 
-print('Moving servo on channel 0, press Ctrl-C to quit...')
+    kit.servo[servo_num].angle = fix_angle
 
-'''while True:
-    pwm.set_pwm(0, 0, servo_min)
-    time.sleep(2)
-    pwm.set_pwm(0, 0, servo_max)
-    time.sleep(2)'''
-pwm.set_pwm(0, 0, 100)
+else:
+    while 1:
+        for i in range(min, max, 1):
+            kit.servo[servo_num].angle = i
+            print(i)
+            time.sleep(time_sleep)
+        time.sleep(time_sleep)
+        for i in range(max, min, -1):
+            kit.servo[servo_num].angle = i
+            print(i)
+            time.sleep(time_sleep)
+        time.sleep(time_sleep)

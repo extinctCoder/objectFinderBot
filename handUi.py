@@ -249,23 +249,23 @@ def sync_func():
 
     speed_update_scale.set(hand_speed_factor)
 
-    broadrcaster.publish(command_claw, int(speed_claw))
-    time.sleep(.5)
+    '''broadrcaster.publish(command_claw, int(speed_claw))
+    time.sleep(2)
 
     broadrcaster.publish(command_fifth_degree, int(speed_fifth_degree))
-    time.sleep(.5)
+    time.sleep(2)
 
     broadrcaster.publish(command_fourth_degree, int(speed_fourth_degree))
-    time.sleep(.5)
+    time.sleep(2)
 
     broadrcaster.publish(command_third_degree, int(speed_third_degree))
-    time.sleep(.5)
+    time.sleep(2)
 
     broadrcaster.publish(command_second_degree, int(speed_second_degree))
-    time.sleep(.5)
+    time.sleep(2)
 
     broadrcaster.publish(command_first_degree, int(speed_first_degree))
-    time.sleep(.5)
+    time.sleep(2)'''
 
     first_degree_inc_update_btn.config(state=ACTIVE)
     first_degree_dec_update_btn.config(state=ACTIVE)

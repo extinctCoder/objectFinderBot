@@ -2,6 +2,8 @@ import time
 import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
 
+from autoHandScript import run
+
 motor_a_1 = 31
 motor_a_2 = 33
 motor_b_1 = 35
@@ -10,9 +12,16 @@ motor_b_2 = 37
 motor_a_pwm = 36
 motor_b_pwm = 38
 
+sonar_data = -1
+sonar_data_max = 18
+
+motor_speed = 70
+turn_speed = 80
+
 
 command_motor_direction = "objectFinderBot/motor/command/direction"
 command_motor_speed = "objectFinderBot/motor/command/speed"
+command_sonar_data = "objectFinderBot/motor/command/sonar"
 topic = "objectFinderBot/motor/command/#"
 
 GPIO.setmode(GPIO.BOARD)
@@ -31,6 +40,7 @@ pwm_b.start(0)
 
 
 def forward():
+    change_speed(motor_speed)
     GPIO.output(motor_a_1, GPIO.HIGH)
     GPIO.output(motor_a_2, GPIO.LOW)
     GPIO.output(motor_b_1, GPIO.HIGH)
@@ -39,6 +49,7 @@ def forward():
 
 
 def backward():
+    change_speed(motor_speed)
     GPIO.output(motor_a_1, GPIO.LOW)
     GPIO.output(motor_a_2, GPIO.HIGH)
     GPIO.output(motor_b_1, GPIO.LOW)
@@ -47,6 +58,7 @@ def backward():
 
 
 def left():
+    change_speed(motor_speed + turn_speed)
     GPIO.output(motor_a_1, GPIO.HIGH)
     GPIO.output(motor_a_2, GPIO.LOW)
     GPIO.output(motor_b_1, GPIO.LOW)
@@ -55,6 +67,7 @@ def left():
 
 
 def right():
+    change_speed(motor_speed + turn_speed)
     GPIO.output(motor_a_1, GPIO.LOW)
     GPIO.output(motor_a_2, GPIO.HIGH)
     GPIO.output(motor_b_1, GPIO.HIGH)
@@ -63,6 +76,7 @@ def right():
 
 
 def stop():
+    change_speed(motor_speed)
     GPIO.output(motor_a_1, GPIO.LOW)
     GPIO.output(motor_a_2, GPIO.LOW)
     GPIO.output(motor_b_1, GPIO.LOW)
@@ -73,30 +87,37 @@ def stop():
 def change_speed(speed):
     pwm_a.ChangeDutyCycle(speed)
     pwm_b.ChangeDutyCycle(speed)
+    motor_speed = speed
     return
 
 
 def on_message(client, userdata, message):
-    print(message)
-    print("xxxx")
+    global sonar_data, sonar_data_max
     if(message.topic == command_motor_speed):
         change_speed(int(str(message.payload.decode("utf-8"))))
+    elif(message.topic == command_sonar_data):
+        sonar_data = int(str(message.payload.decode("utf-8")))
     elif(message.topic == command_motor_direction):
-        if(int(str(message.payload.decode("utf-8"))) == 0):
-            forward()
-            print("forward")
-        elif(int(str(message.payload.decode("utf-8"))) == 1):
-            left()
-            print("left")
-        elif(int(str(message.payload.decode("utf-8"))) == 2):
-            backward()
-            print("backward")
-        elif(int(str(message.payload.decode("utf-8"))) == 3):
-            right()
-            print("right")
-        elif(int(str(message.payload.decode("utf-8"))) == 4):
+        if(sonar_data <= sonar_data_max):
             stop()
             print("stop")
+
+        else:
+            if(int(str(message.payload.decode("utf-8"))) == 0):
+                forward()
+                print("forward")
+            elif(int(str(message.payload.decode("utf-8"))) == 1):
+                left()
+                print("left")
+            elif(int(str(message.payload.decode("utf-8"))) == 2):
+                backward()
+                print("backward")
+            elif(int(str(message.payload.decode("utf-8"))) == 3):
+                right()
+                print("right")
+            elif(int(str(message.payload.decode("utf-8"))) == 4):
+                stop()
+                print("stop")
     return
 
 
@@ -121,6 +142,7 @@ try:
     client.on_message = on_message
     # client.on_log = on_log
     print("Connecting to mqtt broker")
+    change_speed(motor_speed)
     client.connect("192.168.0.117")
     client.loop_forever()
 
