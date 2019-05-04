@@ -2,7 +2,7 @@ import time
 import RPi.GPIO as GPIO
 import paho.mqtt.client as mqtt
 
-from autoHandScript import run
+from autoHandScript import run, run_start
 
 motor_a_1 = 31
 motor_a_2 = 33
@@ -13,10 +13,12 @@ motor_a_pwm = 36
 motor_b_pwm = 38
 
 sonar_data = -1
-sonar_data_max = 18
+sonar_data_max = 25
 
-motor_speed = 80
+motor_speed = 70
 turn_speed = 80
+
+ball_taken = False
 
 
 command_motor_direction = "objectFinderBot/motor/command/direction"
@@ -92,17 +94,31 @@ def change_speed(speed):
 
 
 def on_message(client, userdata, message):
-    global sonar_data, sonar_data_max
+    global sonar_data, sonar_data_max, ball_taken
     if(message.topic == command_motor_speed):
         change_speed(int(str(message.payload.decode("utf-8"))))
     elif(message.topic == command_sonar_data):
         sonar_data = int(str(message.payload.decode("utf-8")))
     elif(message.topic == command_motor_direction):
-        if(sonar_data <= sonar_data_max):
+        if(sonar_data == -1):
+            print("starting position stop")
             stop()
-            print("stop")
-
-        else:
+        elif(sonar_data <= sonar_data_max and sonar_data >= sonar_data_max-10 and ball_taken == False):
+            stop()
+            print("please wait for pickup position")
+            time.sleep(10)
+            print("stop & pick ball")
+            time.sleep(10)
+            run()
+            time.sleep(5)
+            print("bot is starting to retrive ....")
+            backward()
+            time.sleep(5)
+            stop()
+            print("time's up ...")
+            time.sleep(10000)
+            ball_taken = True
+        elif(sonar_data >= sonar_data_max):
             if(int(str(message.payload.decode("utf-8"))) == 0):
                 forward()
                 print("forward")
@@ -117,7 +133,7 @@ def on_message(client, userdata, message):
                 print("right")
             elif(int(str(message.payload.decode("utf-8"))) == 4):
                 stop()
-                print("stop")
+                print("stop movement")
     return
 
 
@@ -137,6 +153,7 @@ def on_connect(client, userdata, flags, rc):
 try:
     print("Wellcome to mqtt broker rover runner script")
     print("Creating new instance of mqtt client")
+    stop()
     client = mqtt.Client()
     client.on_connect = on_connect
     client.on_message = on_message
@@ -144,6 +161,7 @@ try:
     print("Connecting to mqtt broker")
     change_speed(motor_speed)
     client.connect("192.168.0.117")
+    run_start()
     client.loop_forever()
 
 except KeyboardInterrupt:

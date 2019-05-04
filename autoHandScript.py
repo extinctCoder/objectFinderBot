@@ -232,7 +232,7 @@ def update_position():
         print('\r', i, end=" ")
     print(" ")
 
-    '''if(second_degree < second_degree_old):
+    if(second_degree < second_degree_old):
 
         for movement in range(second_degree_old, second_degree, -1):
             print('sending command in chanel : {0} the command is : {1}'.format(
@@ -283,7 +283,7 @@ def update_position():
             first_degree_old = movement
             broadrcaster.publish(command_first_degree, int(movement))
             time.sleep(speed_factor)
-            print("--command send")'''
+            print("--command send")
 
     print('sending command in chanel : {0} the command is : {1}'.format(
         str(command_first_degree), str(first_degree)))
@@ -350,10 +350,10 @@ def backup_data_into_db():
 def initial_state_witout_object():
     print("-> prepaing for initial_state_witout_object state")
     global first_degree, second_degree, third_degree, fourth_degree, fifth_degree, claw
-    third_degree = 0
+    third_degree = 100
     fourth_degree = 0
     fifth_degree = 0
-    claw = 100
+    claw = 0
     update_position()
     print("----task compleated")
 
@@ -361,7 +361,6 @@ def initial_state_witout_object():
 def ready_to_pickup_state():
     print("-> prepaing for ready_to_pickup_state state")
     global first_degree, second_degree, third_degree, fourth_degree, fifth_degree, claw
-    third_degree = 100
     fourth_degree = 50
     fifth_degree = 10
     claw = 0
@@ -449,10 +448,6 @@ def run():
         time.sleep(speed_factor)
         update_position()
         for i in range(0, 1):
-            initial_state_witout_object()
-            time.sleep(speed_factor*speed_limit)
-            ready_to_pickup_state()
-            time.sleep(speed_factor*speed_limit)
             pickup_and_retrive_state()
             time.sleep(speed_factor*speed_limit)
     except KeyboardInterrupt:
@@ -460,6 +455,53 @@ def run():
 
     finally:
         # initial_state_witout_object()
+        backup_data_into_db()
+
+
+def run_start():
+    try:
+        print("starting auto script")
+        print("3")
+        time.sleep(1)
+        print("2")
+        time.sleep(1)
+        print("1")
+        time.sleep(1)
+
+        broadrcaster = get_broadrcaster()
+
+        print("connnection established")
+        print("syncing servopositions from the data base")
+
+        print('last known angle of the servo no. 1 is : {0}'.format(str(
+            first_degree_old)))
+        print('last known angle of the servo no. 2 is : {0}'.format(str(
+            second_degree_old)))
+        print('last known angle of the servo no. 3 is : {0}'.format(str(
+            third_degree_old)))
+        print('last known angle of the servo no. 4 is : {0}'.format(str(
+            fourth_degree_old)))
+        print('last known angle of the servo no. 5 is : {0}'.format(str(
+            fifth_degree_old)))
+        print('last known angle of the servo no. 6 is : {0}'.format(str(
+            claw_old)))
+
+        first_degree = first_degree_old
+        second_degree = second_degree_old
+        third_degree = third_degree_old
+        fourth_degree = fourth_degree_old
+        fifth_degree = fifth_degree_old
+        claw = claw_old
+
+        time.sleep(speed_factor)
+        update_position()
+        for i in range(0, 1):
+            initial_state_witout_object()
+            time.sleep(speed_factor*speed_limit)
+    except KeyboardInterrupt:
+        print("unexpected user input detected. enabling emergency mode ....!!!!")
+
+    finally:
         backup_data_into_db()
 
 
